@@ -40,9 +40,13 @@ public class ProductDaoImpl implements ProductDao {
             map.put("search","%" + productQueryParams.getSearch() + "%");
         }
 
-        // There's no need to check if orderBy and sort are null because we've already set default values for them
+        // no need to check if orderBy/sort/limit/offset params are null because we've already set default values for them
+        // sorting
         sql = sql + " ORDER BY "+ productQueryParams.getOrderBy() + " "+ productQueryParams.getSort();
-
+        // pagination
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
