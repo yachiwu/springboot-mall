@@ -32,12 +32,17 @@ public class ProductDaoImpl implements ProductDao {
         Map<String,Object> map = new HashMap<>();
         if(productQueryParams.getCategory() != null){
             sql = sql + " AND category =:category";
+            // Since ProductCategory is an enum type , we have to convert it to String
             map.put("category",productQueryParams.getCategory().name());
         }
         if(productQueryParams.getSearch() != null){
             sql = sql + " AND product_name LIKE :search";
             map.put("search","%" + productQueryParams.getSearch() + "%");
         }
+
+        // There's no need to check if orderBy and sort are null because we've already set default values for them
+        sql = sql + " ORDER BY "+ productQueryParams.getOrderBy() + " "+ productQueryParams.getSort();
+
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
