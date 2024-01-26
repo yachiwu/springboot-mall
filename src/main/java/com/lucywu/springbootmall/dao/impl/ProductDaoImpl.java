@@ -27,15 +27,8 @@ public class ProductDaoImpl implements ProductDao {
     public Integer countProduct(ProductQueryParams productQueryParams) {
         String sql = "SELECT count(*) FROM product WHERE 1=1";
         Map<String,Object> map = new HashMap<>();
-        if(productQueryParams.getCategory() != null){
-            sql = sql + " AND category =:category";
-            // Since ProductCategory is an enum type , we have to convert it to String
-            map.put("category",productQueryParams.getCategory().name());
-        }
-        if(productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search","%" + productQueryParams.getSearch() + "%");
-        }
+        // filter condition
+        sql = addFilteringSql(sql,map,productQueryParams);
         Integer total = namedParameterJdbcTemplate.queryForObject(sql,map,Integer.class);
         return total;
     }
@@ -47,15 +40,8 @@ public class ProductDaoImpl implements ProductDao {
                 "FROM product WHERE 1=1";
         // WHERE 1=1 用途為組合下面的查詢條件
         Map<String,Object> map = new HashMap<>();
-        if(productQueryParams.getCategory() != null){
-            sql = sql + " AND category =:category";
-            // Since ProductCategory is an enum type , we have to convert it to String
-            map.put("category",productQueryParams.getCategory().name());
-        }
-        if(productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search","%" + productQueryParams.getSearch() + "%");
-        }
+        // filter condition
+        sql = addFilteringSql(sql,map,productQueryParams);
 
         // no need to check if orderBy/sort/limit/offset params are null because we've already set default values for them
         // sorting
@@ -133,5 +119,17 @@ public class ProductDaoImpl implements ProductDao {
         Map<String,Object> map = new HashMap<>();
         map.put("productId", productId);
         namedParameterJdbcTemplate.update(sql,map);
+    }
+    private  String addFilteringSql(String sql,Map<String,Object> map,ProductQueryParams productQueryParams){
+        if(productQueryParams.getCategory() != null){
+            sql = sql + " AND category =:category";
+            // Since ProductCategory is an enum type , we have to convert it to String
+            map.put("category",productQueryParams.getCategory().name());
+        }
+        if(productQueryParams.getSearch() != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search","%" + productQueryParams.getSearch() + "%");
+        }
+        return sql;
     }
 }
