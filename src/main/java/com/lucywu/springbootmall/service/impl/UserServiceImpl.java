@@ -1,6 +1,7 @@
 package com.lucywu.springbootmall.service.impl;
 
 import com.lucywu.springbootmall.dao.UserDao;
+import com.lucywu.springbootmall.dto.UserLoginRequest;
 import com.lucywu.springbootmall.dto.UserRegisterRequest;
 import com.lucywu.springbootmall.model.User;
 import com.lucywu.springbootmall.service.UserService;
@@ -31,4 +32,18 @@ public class UserServiceImpl implements UserService {
         return userDao.createUser(userRegisterRequest);
     }
 
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+        if (user == null){
+            log.warn("Email hasn't yet been registered",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }else{
+            log.warn("Email {} 's password is incorrect",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
