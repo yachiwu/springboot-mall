@@ -1,10 +1,14 @@
 package com.lucywu.springbootmall.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class UserRegisterRequest {
     @NotBlank
+    @Email
     private String email;
     @NotBlank
     private String password;
