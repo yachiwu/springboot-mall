@@ -97,6 +97,8 @@ public class ProductControllerTest {
     }
 
     // 更新商品
+    @Transactional
+    @Test
     public void updateProduct_success() throws Exception{
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -121,7 +123,8 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
-
+    @Transactional
+    @Test
     public void updateProduct_illegalArgument () throws Exception{
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -134,6 +137,8 @@ public class ProductControllerTest {
                 .andExpect(status().is(400));
     }
 
+    @Transactional
+    @Test
     public void updateProduct_productNotFound () throws Exception{
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -171,7 +176,7 @@ public class ProductControllerTest {
                 .andExpect(status().is(204));
     }
 
-    // 查詢商品
+    // 查詢商品 有條件
     @Test
     public void getProducts() throws Exception{
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/products");
