@@ -1,13 +1,16 @@
 package com.lucywu.springbootmall.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private Integer orderId;
     private Integer userId;
-    private Integer totalMount;
+    private Integer totalAmount;
     private Date createdDate;
     private Date lastModifiedDate;
+
+    private List<OrderItem> orderItemList;
 
     public Integer getOrderId() {
         return orderId;
@@ -25,12 +28,12 @@ public class Order {
         this.userId = userId;
     }
 
-    public Integer getTotalMount() {
-        return totalMount;
+    public Integer getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotalMount(Integer totalMount) {
-        this.totalMount = totalMount;
+    public void setTotalAmount(Integer totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public Date getCreatedDate() {
@@ -47,5 +50,13 @@ public class Order {
 
     public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }
