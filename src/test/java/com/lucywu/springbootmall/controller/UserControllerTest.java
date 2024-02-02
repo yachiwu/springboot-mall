@@ -28,6 +28,7 @@ public class UserControllerTest {
     @Autowired
     private UserDao userDao;
     private ObjectMapper objectMapper = new ObjectMapper();
+    // user unit test 沒有使用h2 資料庫的data 因為password是加密過的值，較不好insert
     @Test
     public void register_success() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
