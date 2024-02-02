@@ -5,6 +5,7 @@ import com.lucywu.springbootmall.dao.ProductDao;
 import com.lucywu.springbootmall.dao.UserDao;
 import com.lucywu.springbootmall.dto.BuyItem;
 import com.lucywu.springbootmall.dto.CreateOrderRequest;
+import com.lucywu.springbootmall.dto.OrderQueryParams;
 import com.lucywu.springbootmall.model.Order;
 import com.lucywu.springbootmall.model.OrderItem;
 import com.lucywu.springbootmall.model.Product;
@@ -30,6 +31,23 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private UserDao userDao;
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        // get orders match the condition
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+        for (Order order : orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
 
     @Override
     public Order getOrderById(Integer orderId) {
